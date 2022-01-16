@@ -1,0 +1,7 @@
+{ 
+    "token"  : "add your own token here",
+    "prefix" : "!",
+    "channel" : {
+        "quotes" : "your quotes channel id"
+    }
+}

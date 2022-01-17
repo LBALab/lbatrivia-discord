@@ -106,6 +106,11 @@ client.on("message", (message) => {
               value: obj.difficulty,
               inline: true,
             },
+            {
+              name: "By",
+              value: obj.author,
+              inline: true,
+            },
           ];
 
           if (obj) {
@@ -150,6 +155,11 @@ client.on("message", (message) => {
                   value: obj.difficulty,
                   inline: true,
                 },
+                {
+                  name: "By",
+                  value: obj.author,
+                  inline: true,
+                },
               ];
               message.channel.send({
                 embed: {
@@ -190,6 +200,7 @@ client.on("message", (message) => {
               type: "question",
               game,
               difficulty,
+              author: message.author.username,
               question,
               answer: null,
             };

@@ -2,19 +2,22 @@
 Trivia Discord App Bot for Little Big Adventure series
 
 # Usage
-Join the Voice channel to hear the original game audio.
 
 Command types:
 ```
 !ping - to known if bot is alive
 
-!lba1 - for random quotes (text only)
-!lba1 1 - for specific entry
-!lba1 zoe - for random quote with keyword
+!trivia - for random trivia questions
+!trivia 1 - for specific entry
+!trivia lba1 - for a random lba1 question (game: lba1, lba2)
+!trivia easy - for a random easy question (difficulty: easy, medium, hard)
 
-!lba2 - for random quotes including voice sample streaming
-!lba2 2 - for specific entry
-!lba2 twinsen - for random quote with keyword
+!question = !trivia
+!info = !trivia with additional fields
+
+!answer 1 - reply the answer to question 1
+
+!add lba1 easy My Question? - add new question
+!add-answer 2 My Answer to Question 2. - add an answer to a question
 ```
-
-- The bot will randomly add a game quote every 3h on #lba-quotes.
+- The bot will randomly add a game quote every 3h on #lba-trivia.

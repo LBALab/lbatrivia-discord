@@ -30,15 +30,6 @@
     "id": 4,
     "type": "question",
     "game": "lba2",
-    "difficulty": "true",
-    "author": "Phreak",
-    "question": "or False skeletons bow to nitro meca penguins?",
-    "answer": "True"
-  },
-  {
-    "id": 5,
-    "type": "question",
-    "game": "lba2",
     "difficulty": "medium",
     "author": "Phreak",
     "question": "True or False skeletons bow to nitro meca penguins?",

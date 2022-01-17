@@ -71,18 +71,12 @@ client.on("message", (message) => {
   const run = (c, a) => {
     try {
       switch (c) {
-        case "ping":
+        case 'ping':
           message.reply("pong");
           break;
 
-        case "trivia":
-          // const fields = [
-          //   {
-          //     name: "Race",
-          //     value: character.race,
-          //     inline: true,
-          //   },
-          // ];
+        case 'question':
+        case 'trivia': {
           let filteredQuestions = [...questions];
           let game = `lba${Math.random() > 0.5 ? 2 : 1}`;
           let difficulty = DIFFICULTY_TYPE[parseInt(Math.random() * 3)];
@@ -96,17 +90,34 @@ client.on("message", (message) => {
           }
           let index = parseInt(Math.random() * filteredQuestions.length);
           const obj = filteredQuestions[index];
+          const fields = [
+            {
+              name: "#",
+              value: index,
+              inline: true,
+            },
+            {
+              name: "Game",
+              value: obj.game,
+              inline: true,
+            },
+            {
+              name: "Difficulty",
+              value: obj.difficulty,
+              inline: true,
+            },
+          ];
 
           if (obj) {
             message.channel.send({
               embed: {
                 description: "```" + obj.question + "```",
-                footer: {
-                  text: `${obj.game.toUpperCase()} | ${index}`,
-                },
+                // footer: {
+                //   text: `${obj.game.toUpperCase()} | ${index}`,
+                // },
                 // thumbnail,
                 // author,
-                // fields,
+                fields,
               },
             });
           } else {
@@ -114,9 +125,57 @@ client.on("message", (message) => {
               "No trivia questions found!"
             );
           }
+        }
           break;
 
-        case "add":
+          case 'answer': {
+            if (a.length == 1) {
+            const index = parseInt(a[0]);
+            const obj = questions[index];
+  
+            if (obj) {
+              const fields = [
+                {
+                  name: "#",
+                  value: index,
+                  inline: true,
+                },
+                {
+                  name: "Game",
+                  value: obj.game,
+                  inline: true,
+                },
+                {
+                  name: "Difficulty",
+                  value: obj.difficulty,
+                  inline: true,
+                },
+              ];
+              message.channel.send({
+                embed: {
+                  description: "```Question: " + obj.question + "``````Answer: " + obj.answer + "```",
+                  // footer: {
+                  //   text: `${obj.game.toUpperCase()} | ${index}`,
+                  // },
+                  // thumbnail,
+                  // author,
+                  fields,
+                },
+              });
+            } else {
+              message.reply(
+                "No trivia answer found!"
+              );
+            }
+          } else {
+            message.reply(
+              "answer command needs 1 argument, question index number"
+            );
+          }
+          }
+            break;
+
+        case 'add':
           if (a.length >= 3) {
             const game = a[0].toLowerCase();
             const difficulty = a[1].toLowerCase();
@@ -132,6 +191,7 @@ client.on("message", (message) => {
               game,
               difficulty,
               question,
+              answer: null,
             };
 
             questions.push(obj);
@@ -146,7 +206,28 @@ client.on("message", (message) => {
           }
 
           message.reply(
-            "trivia command needs 3 arguments, game (lba1|lba2), difficulty (easy|medium|hard) and question"
+            "add command needs 3 arguments, game (lba1|lba2), difficulty (easy|medium|hard) and question"
+          );
+          break;
+
+        case 'add-answer':
+          if (a.length >= 2) {
+            const index = parseInt(a[0]);
+            const answer = a.slice(1).join(" ");
+            const obj = questions[index];
+
+            obj.answer = answer;
+
+            fs.writeFileSync(
+              "metadata/questions.json",
+              JSON.stringify(questions, null, 2)
+            );
+            message.reply(`Trivia question ${index} for ${obj.game} added!!`);
+            break;
+          }
+
+          message.reply(
+            "add-answer command needs 2 arguments, question index number and the answer text"
           );
           break;
       }

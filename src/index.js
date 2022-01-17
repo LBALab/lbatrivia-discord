@@ -75,12 +75,26 @@ client.on("message", (message) => {
           message.reply("pong");
           break;
 
+        case 'info':
         case 'question':
         case 'trivia': {
+          let id = null;
           let filteredQuestions = [...questions];
           let game = `lba${Math.random() > 0.5 ? 2 : 1}`;
           let difficulty = DIFFICULTY_TYPE[parseInt(Math.random() * 3)];
-          if (a.length >= 1) {
+          if (a.length == 1) {
+            if (a[0] == 'lba1' || a[0] == 'lba2') {
+              game = a[0];
+              filteredQuestions = filteredQuestions.filter((q) => q.game === game);
+            } else if (!isNaN(a[0])) {
+              id = parseInt(a[0]);
+              filteredQuestions = filteredQuestions.filter((q) => q.id === id);
+            } else if (a[0] == 'easy' || a[0] == 'medium' || a[0] == 'hard') {
+              difficulty = a[0];
+              filteredQuestions = filteredQuestions.filter((q) => q.difficulty === difficulty);
+            }
+          }
+          else if (a.length >= 1) {
             game = a[0];
             filteredQuestions = filteredQuestions.filter((q) => q.game === game);
             if (a.length >= 2) {
@@ -90,15 +104,10 @@ client.on("message", (message) => {
           }
           let index = parseInt(Math.random() * filteredQuestions.length);
           const obj = filteredQuestions[index];
-          const fields = [
-            {
-              name: "#",
-              value: index,
-              inline: true,
-            },
+          const fields = c === 'info' ? [
             {
               name: "Game",
-              value: obj.game,
+              value: `${obj.game} | ${obj.id}`.toUpperCase(),
               inline: true,
             },
             {
@@ -111,15 +120,15 @@ client.on("message", (message) => {
               value: obj.author,
               inline: true,
             },
-          ];
+          ] : null;
 
           if (obj) {
             message.channel.send({
               embed: {
                 description: "```" + obj.question + "```",
-                // footer: {
-                //   text: `${obj.game.toUpperCase()} | ${index}`,
-                // },
+                footer: c !== 'info' ? {
+                  text: `${obj.game.toUpperCase()} | ${obj.id}`,
+                } : null,
                 // thumbnail,
                 // author,
                 fields,
@@ -135,19 +144,14 @@ client.on("message", (message) => {
 
           case 'answer': {
             if (a.length == 1) {
-            const index = parseInt(a[0]);
-            const obj = questions[index];
+            const id = parseInt(a[0]);
+            const obj = questions.find((q) => q.id === id);
   
             if (obj) {
               const fields = [
                 {
-                  name: "#",
-                  value: index,
-                  inline: true,
-                },
-                {
                   name: "Game",
-                  value: obj.game,
+                  value: `${obj.game} | ${obj.id}`.toUpperCase(),
                   inline: true,
                 },
                 {
@@ -197,6 +201,7 @@ client.on("message", (message) => {
             }
 
             const obj = {
+              id: questions[questions.length - 1].id + 1,
               type: "question",
               game,
               difficulty,
@@ -206,13 +211,12 @@ client.on("message", (message) => {
             };
 
             questions.push(obj);
-            const index = questions.length - 1;
 
             fs.writeFileSync(
               "metadata/questions.json",
               JSON.stringify(questions, null, 2)
             );
-            message.reply(`Trivia question ${index} for ${game} added!!`);
+            message.reply(`Trivia question ${obj.id} for ${obj.game} added!!`);
             break;
           }
 
@@ -241,6 +245,33 @@ client.on("message", (message) => {
             "add-answer command needs 2 arguments, question index number and the answer text"
           );
           break;
+
+          case 'delete':
+            if (a.length == 1) {
+              const id = parseInt(a[0]);
+              const obj = questions.find((q) => q.id === id);
+
+              if (obj.author === message.author.username) {
+                const index = questions.indexOf((q) => q.id === id);
+                if (index > -1) {
+                  questions.splice(index, 1);
+                }
+                fs.writeFileSync(
+                  "metadata/questions.json",
+                  JSON.stringify(questions, null, 2)
+                );
+                message.reply(`Trivia question ${obj.id} removed sucessfully!!`);
+              } else {
+                message.reply(`You don't have permission to delete trivia question ${obj.id}`);
+              }
+  
+              break;
+            }
+  
+            message.reply(
+              "delete command needs 1 argument, question index number"
+            );
+            break;
       }
     } catch (ex) {
       console.log(ex);

@@ -1,2 +1,47 @@
 [
+  {
+    "id": 1,
+    "type": "question",
+    "game": "lba1",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "How many elves are in The Elves Club?",
+    "answer": "4 - Joe, Raymond, one unnamed elf, and Twinsen (introduced as the 4th member)"
+  },
+  {
+    "id": 2,
+    "type": "question",
+    "game": "lba1",
+    "difficulty": "easy",
+    "author": "Phreak",
+    "question": "Which country were the developers of LBA from?",
+    "answer": "France"
+  },
+  {
+    "id": 3,
+    "type": "question",
+    "game": "lba1",
+    "difficulty": "easy",
+    "author": "Phreak",
+    "question": "What is the name of Twinsen's friend who gets arrested?",
+    "answer": "Zoé"
+  },
+  {
+    "id": 4,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "true",
+    "author": "Phreak",
+    "question": "or False skeletons bow to nitro meca penguins?",
+    "answer": "True"
+  },
+  {
+    "id": 5,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "medium",
+    "author": "Phreak",
+    "question": "True or False skeletons bow to nitro meca penguins?",
+    "answer": "True"
+  }
 ]

@@ -20,7 +20,12 @@ process.on("error", (err) => {
 
 console.log("Preloading...");
 
-let questions = {};
+let questions = [];
+const DIFFICULTY_TYPE = [
+  'easy',
+  'medium',
+  'hard',
+]
 
 const questionsFilename = "metadata/questions.json";
 if (fs.existsSync(questionsFilename)) {
@@ -35,17 +40,18 @@ const client = new Discord.Client();
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
-  // // every 3h random message disabled
-  // const channel = client.channels.get(config.channel.quotes);
-  // setInterval(
-  //     () => {
-  //         const text = allquotes[Math.floor((Math.random() * allquotes.length))];
-  //         const dialog = `${text.value}`;
-  //         const quote = '```' + dialog + '```' + `*\`LBA2 (#${text.index})\`*`;
-  //         channel.send(quote);
-  //     },
-  //     10800000 // every 3h
-  // );
+  // every 5h random message disabled
+  const channel = client.channels.get(config.channel.quotes);
+  setInterval(
+      () => {
+          const index = Math.floor((Math.random() * questions.length));
+          const obj = questions[index];
+          const question = `${obj.question}`;
+          const quote = '```' + question + '```' + `*\`LBA${obj.game} (#${index})\`*`;
+          channel.send(quote);
+      },
+      18000000 // every 5h
+  );
 });
 
 client.on("message", (message) => {
@@ -77,30 +83,44 @@ client.on("message", (message) => {
           //     inline: true,
           //   },
           // ];
+          let filteredQuestions = [...questions];
           let game = `lba${Math.random() > 0.5 ? 2 : 1}`;
-          if (a.length == 1) {
+          let difficulty = DIFFICULTY_TYPE[parseInt(Math.random() * 3)];
+          if (a.length >= 1) {
             game = a[0];
+            filteredQuestions = filteredQuestions.filter((q) => q.game === game);
+            if (a.length >= 2) {
+              difficulty = a[1];
+              filteredQuestions = filteredQuestions.filter((q) => q.difficulty === difficulty);
+            }
           }
-          const index = parseInt(Math.random() * questions[game].length);
-          const obj = questions[game][index];
+          let index = parseInt(Math.random() * filteredQuestions.length);
+          const obj = filteredQuestions[index];
 
-          message.channel.send({
-            embed: {
-              description: "```" + obj.question + "```",
-              footer: {
-                text: `${game.toUpperCase()} | ${index}`,
+          if (obj) {
+            message.channel.send({
+              embed: {
+                description: "```" + obj.question + "```",
+                footer: {
+                  text: `${obj.game.toUpperCase()} | ${index}`,
+                },
+                // thumbnail,
+                // author,
+                // fields,
               },
-              // thumbnail,
-              // author,
-              // fields,
-            },
-          });
+            });
+          } else {
+            message.reply(
+              "No trivia questions found!"
+            );
+          }
           break;
 
         case "add":
-          if (a.length >= 2) {
+          if (a.length >= 3) {
             const game = a[0].toLowerCase();
-            const question = a.slice(1).join(" ");
+            const difficulty = a[1].toLowerCase();
+            const question = a.slice(2).join(" ");
 
             if (game != "lba1" && game != "lba2") {
               message.reply(`${game} is not a valid game type.`);
@@ -109,11 +129,13 @@ client.on("message", (message) => {
 
             const obj = {
               type: "question",
+              game,
+              difficulty,
               question,
             };
 
-            questions[game].push(obj);
-            const index = questions[game].length - 1;
+            questions.push(obj);
+            const index = questions.length - 1;
 
             fs.writeFileSync(
               "metadata/questions.json",
@@ -124,7 +146,7 @@ client.on("message", (message) => {
           }
 
           message.reply(
-            "trivia command needs 3 arguments, game (lba1|lba2), question and [optional answer or list of answers]"
+            "trivia command needs 3 arguments, game (lba1|lba2), difficulty (easy|medium|hard) and question"
           );
           break;
       }

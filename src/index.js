@@ -75,7 +75,6 @@ client.on("message", (message) => {
           message.reply("pong");
           break;
 
-        case 'info':
         case 'question':
         case 'trivia': {
           let id = null;
@@ -142,7 +141,7 @@ client.on("message", (message) => {
         }
           break;
 
-          case 'answer': {
+          case 'info': {
             if (a.length == 1) {
             const id = parseInt(a[0]);
             const obj = questions.find((q) => q.id === id);
@@ -183,11 +182,29 @@ client.on("message", (message) => {
             }
           } else {
             message.reply(
-              "answer command needs 1 argument, question index number"
+              "info command needs 1 argument, question index number"
             );
           }
           }
             break;
+
+        case 'answer': {
+          if (a.length >= 2) {
+            const id = parseInt(a[0]);
+            const answer = a.slice(1).join(" ").toLowerCase();
+            const obj = questions.find((q) => q.id === id);
+            if (obj != null && obj.answer != null && obj.answer.toLowerCase() == answer) {
+              message.react("✅");
+            } else {
+              message.react("❌");
+            }
+          } else {
+            message.reply(
+              "answer command needs 2 argument, question index number and the correct answer text"
+            );
+          }
+        }
+          break;
 
         case 'add':
           if (a.length >= 3) {
@@ -227,9 +244,9 @@ client.on("message", (message) => {
 
         case 'add-answer':
           if (a.length >= 2) {
-            const index = parseInt(a[0]);
+            const id = parseInt(a[0]);
             const answer = a.slice(1).join(" ");
-            const obj = questions[index];
+            const obj = questions.find((q) => q.id === id);
 
             obj.answer = answer;
 
@@ -237,7 +254,7 @@ client.on("message", (message) => {
               "metadata/questions.json",
               JSON.stringify(questions, null, 2)
             );
-            message.reply(`Trivia question ${index} for ${obj.game} added!!`);
+            message.reply(`Trivia answer for question ${id} added!!`);
             break;
           }
 

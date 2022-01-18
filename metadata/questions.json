@@ -34,5 +34,23 @@
     "author": "Phreak",
     "question": "True or False skeletons bow to nitro meca penguins?",
     "answer": "True"
+  },
+  {
+    "id": 5,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "Which item grants Twinsen the second level of magic (green ball)?",
+    "answer": "Wizard's Diploma"
+  },
+  {
+    "id": 6,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "What is the 4th level of magic called?",
+    "answer": "Fireball"
   }
 ]

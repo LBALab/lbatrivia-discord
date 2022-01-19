@@ -1,6 +1,8 @@
-import fs from "fs";
+import fs from 'fs';
+import Diacritics from 'diacritic';
 
 import Discord from "discord.js";
+import { result } from 'lodash';
 
 const requireFunc =
   typeof __webpack_require__ === "function" ? __non_webpack_require__ : require;
@@ -9,6 +11,11 @@ const config = requireFunc("./config.json");
 const toUpperFirst = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+const diacriticsAnswer = (str) => {
+  let value = str.split('-')[0];
+  return Diacritics.clean(value.trim()).replace('\'', '').replace(/[^\w\s]/gi, '');
+}
 
 process.on("unhandledRejection", (err) => {
   console.error("Uncaught Promise Error: \n" + err.stack);
@@ -102,34 +109,17 @@ client.on("message", (message) => {
           }
           let index = parseInt(Math.random() * filteredQuestions.length);
           const obj = filteredQuestions[index];
-          const fields = c === 'info' ? [
-            {
-              name: "Game",
-              value: `${obj.game} | ${obj.id}`.toUpperCase(),
-              inline: true,
-            },
-            {
-              name: "Difficulty",
-              value: obj.difficulty,
-              inline: true,
-            },
-            {
-              name: "By",
-              value: obj.author,
-              inline: true,
-            },
-          ] : null;
 
           if (obj) {
             message.channel.send({
               embed: {
                 description: "```" + obj.question + "```",
-                footer: c !== 'info' ? {
+                footer: {
                   text: `${obj.game.toUpperCase()} | ${obj.id}`,
-                } : null,
+                },
                 // thumbnail,
                 // author,
-                fields,
+                // fields,
               },
             });
           } else {
@@ -154,7 +144,7 @@ client.on("message", (message) => {
                 },
                 {
                   name: "Difficulty",
-                  value: obj.difficulty,
+                  value: toUpperFirst(obj.difficulty),
                   inline: true,
                 },
                 {
@@ -192,7 +182,7 @@ client.on("message", (message) => {
             const id = parseInt(a[0]);
             const answer = a.slice(1).join(" ").toLowerCase();
             const obj = questions.find((q) => q.id === id);
-            if (obj != null && obj.answer != null && obj.answer.toLowerCase() == answer) {
+            if (obj != null && obj.answer != null && diacriticsAnswer(obj.answer.toLowerCase()) == diacriticsAnswer(answer)) {
               message.react("✅");
             } else {
               message.react("❌");

@@ -15,6 +15,7 @@
     "start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
   },
   "dependencies": {
+    "diacritic": "^0.0.2",
     "discord.js": "^11.5.1",
     "lodash": "^4.17.21",
     "opusscript": "^0.0.8"

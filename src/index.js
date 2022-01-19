@@ -40,17 +40,16 @@ const client = new Discord.Client();
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
-  // every 5h random message disabled
-  const channel = client.channels.get(config.channel.quotes);
+  // every 6.5h random message disabled
+  const channel = client.channels.get(config.channel.trivia);
   setInterval(
       () => {
           const index = Math.floor((Math.random() * questions.length));
           const obj = questions[index];
-          const question = `${obj.question}`;
-          const quote = '```' + question + '```' + `*\`LBA${obj.game} (#${index})\`*`;
-          channel.send(quote);
+          const question = '```' + obj.question + '```' + `*\`${obj.game.toUpperCase()} | ${obj.id}\`*`;
+          channel.send(question);
       },
-      18000000 // every 5h
+      23400000 // every 6.5h
   );
 });
 

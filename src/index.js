@@ -34,6 +34,9 @@ const DIFFICULTY_TYPE = [
   'hard',
 ]
 
+let lastQuestionId = 0;
+let lastQuestionTimestamp = null;
+
 const questionsFilename = "metadata/questions.json";
 if (fs.existsSync(questionsFilename)) {
   const questionsMetadata = fs.readFileSync(questionsFilename);
@@ -66,8 +69,9 @@ client.on("message", (message) => {
     return;
   }
 
-  // check if message starts with our prefix >
-  if (message.content.indexOf(config.prefix) !== 0) {
+  // check if message starts with our prefix !
+  // check if the latest question was send 5 mins ago - if so let the bot interact
+  if (!message.content.startsWith(config.prefix) && !(lastQuestionTimestamp != null && Date.now() - lastQuestionTimestamp < 300000)) {
     return;
   }
 
@@ -111,6 +115,8 @@ client.on("message", (message) => {
           const obj = filteredQuestions[index];
 
           if (obj) {
+            lastQuestionId = obj.id;
+            lastQuestionTimestamp = Date.now();
             message.channel.send({
               embed: {
                 description: "```" + obj.question + "```",
@@ -136,6 +142,8 @@ client.on("message", (message) => {
             const obj = questions.find((q) => q.id === id);
   
             if (obj) {
+              lastQuestionId = 0;
+              lastQuestionTimestamp = null;
               const fields = [
                 {
                   name: "Game",
@@ -183,6 +191,8 @@ client.on("message", (message) => {
             const answer = a.slice(1).join(" ").toLowerCase();
             const obj = questions.find((q) => q.id === id);
             if (obj != null && obj.answer != null && diacriticsAnswer(obj.answer.toLowerCase()) == diacriticsAnswer(answer)) {
+              lastQuestionId = 0;
+              lastQuestionTimestamp = null;
               message.react("✅");
             } else {
               message.react("❌");
@@ -284,7 +294,12 @@ client.on("message", (message) => {
     }
   };
 
-  run(command, args);
+  // answer direct message without a command if they are within 5 minutes of the last question
+  if (!message.content.startsWith(config.prefix) && lastQuestionTimestamp != null && Date.now() - lastQuestionTimestamp < 300000) {
+    run('answer', [lastQuestionId, message.content]);
+  } else {
+    run(command, args);
+  }
 });
 
 client.on("disconnect", async () => {

@@ -47,7 +47,7 @@ const set_lastquestion = (obj) => {
 	lastQuestionId = obj.id;
 	lastQuestionTimestamp = Date.now();
 
-	last_question_timer = setInterval(() => {
+	last_question_timer = setTimeout(() => {
 		clear_lastquestion(true);
 	}, NUM_MINUTES_TO_WAIT);
 };
@@ -56,7 +56,6 @@ const clear_lastquestion = (notify = false) => {
 	lastQuestionId = 0;
 	lastQuestionTimestamp = null;
 	clearInterval(last_question_timer);
-
 	if (notify) {
 		const channel = client.channels.get(config.channel.trivia);
 		const question = 'Time is up!!!';

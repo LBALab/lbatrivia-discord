@@ -26,8 +26,8 @@ process.on('error', (err) => {
 
 console.log('Preloading...');
 
-const NUM_MINUTES_RANDOM = 15000; // 23400000;
-const NUM_MINUTES_TO_WAIT = 5000; //3600000;
+const NUM_MINUTES_RANDOM = 23400000;
+const NUM_MINUTES_TO_WAIT = 3600000;
 const DIFFICULTY_TYPE = [ 'easy', 'medium', 'hard' ];
 
 let questions = [];
@@ -160,7 +160,7 @@ client.on('message', (message) => {
 							const obj = questions.find((q) => q.id === id);
 
 							if (obj) {
-								clear_lastquestion(obj);
+								clear_lastquestion();
 								const fields = [
 									{
 										name: 'Game',
@@ -210,7 +210,7 @@ client.on('message', (message) => {
 								obj.answer != null &&
 								diacriticsAnswer(obj.answer.toLowerCase()) == diacriticsAnswer(answer)
 							) {
-								clear_lastquestion(obj);
+								clear_lastquestion();
 								message.react('✅');
 							} else {
 								message.react('❌');

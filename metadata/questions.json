@@ -52,5 +52,59 @@
     "author": "kit",
     "question": "What is the 4th level of magic called?",
     "answer": "Fireball"
+  },
+  {
+    "id": 7,
+    "type": "question",
+    "game": "lba1",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "Which facility is located on Brundle Island?",
+    "answer": "Teleportation Center"
+  },
+  {
+    "id": 8,
+    "type": "question",
+    "game": "lba1",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "What is the secret underground town called located on Tipett Island?",
+    "answer": "Funky-Town"
+  },
+  {
+    "id": 9,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "hard",
+    "author": "kit",
+    "question": "Who is the mother of the umbrella thief?",
+    "answer": "Mrs Brune - she works at the Citadel Island Ferry ticket office and also has another son who attends the school."
+  },
+  {
+    "id": 10,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "hard",
+    "author": "kit",
+    "question": "In Zeelich lore, what was the original name of the one known as Dark Monk?",
+    "answer": "Kard N’kom"
+  },
+  {
+    "id": 11,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "medium",
+    "author": "kit",
+    "question": "Which item does Twinsen need to collect to finish the Lightning Potion?",
+    "answer": "Pearl of Incandescence"
+  },
+  {
+    "id": 12,
+    "type": "question",
+    "game": "lba2",
+    "difficulty": "easy",
+    "author": "kit",
+    "question": "What does the lighthouse keeper say the Tralü will turn him into?",
+    "answer": "rabbibunny-melba"
   }
 ]

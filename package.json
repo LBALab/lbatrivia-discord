@@ -1,32 +1,32 @@
 {
-  "name": "lbatrivia-discord",
-  "version": "0.0.1",
-  "description": "Discord App Bot to interact with Little Big Adventure series quotes",
-  "repository": "https://github.com/xesf/lbatrivia-discord.git",
-  "author": "Alexandre Fontoura <xesfnet@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "module": "dist/lbatrivia-discord.js",
-  "main": "src/index.js",
-  "scripts": {
-    "build": "babel src -s -d dist/",
-    "build:prod": "webpack -p",
-    "start": "babel-node ./src/index.js --ignore ./node_modules",
-    "start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
-  },
-  "dependencies": {
-    "diacritic": "^0.0.2",
-    "discord.js": "^11.5.1",
-    "lodash": "^4.17.21",
-    "opusscript": "^0.0.8"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.15.4",
-    "@babel/core": "^7.15.5",
-    "@babel/node": "^7.15.4",
-    "@babel/preset-env": "^7.15.4",
-    "nodemon": "^2.0.12",
-    "webpack": "^5.52.0",
-    "webpack-cli": "^4.8.0"
-  }
+	"name": "lbatrivia-discord",
+	"version": "0.0.1",
+	"description": "Discord App Bot to interact with Little Big Adventure series quotes",
+	"repository": "https://github.com/xesf/lbatrivia-discord.git",
+	"author": "Alexandre Fontoura <xesfnet@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"module": "dist/lbatrivia-discord.js",
+	"main": "src/index.js",
+	"scripts": {
+		"build": "babel src -s -d dist/",
+		"build:prod": "webpack -p",
+		"start": "babel-node ./src/index.js --ignore ./node_modules",
+		"start:watch": "nodemon ./src/index.js --exec babel-node -- --ignore ./node_modules"
+	},
+	"dependencies": {
+		"diacritic": "^0.0.2",
+		"discord.js": "^11.5.1",
+		"lodash": "^4.17.21",
+		"opusscript": "^0.0.8"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.15.4",
+		"@babel/core": "^7.15.5",
+		"@babel/node": "^7.15.4",
+		"@babel/preset-env": "^7.15.4",
+		"nodemon": "^2.0.12",
+		"webpack": "^5.52.0",
+		"webpack-cli": "^4.8.0"
+	}
 }

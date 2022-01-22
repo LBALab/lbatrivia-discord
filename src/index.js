@@ -26,8 +26,8 @@ process.on('error', (err) => {
 
 console.log('Preloading...');
 
-const NUM_MINUTES_RANDOM = 23400000;
-const NUM_MINUTES_TO_WAIT = 3600000;
+const NUM_MINUTES_RANDOM = 15000; // 23400000;
+const NUM_MINUTES_TO_WAIT = 5000; //3600000;
 const DIFFICULTY_TYPE = [ 'easy', 'medium', 'hard' ];
 
 let questions = [];
@@ -48,18 +48,20 @@ const set_lastquestion = (obj) => {
 	lastQuestionTimestamp = Date.now();
 
 	last_question_timer = setInterval(() => {
-		clear_lastquestion();
+		clear_lastquestion(true);
 	}, NUM_MINUTES_TO_WAIT);
 };
 
-const clear_lastquestion = () => {
+const clear_lastquestion = (notify = false) => {
 	lastQuestionId = 0;
 	lastQuestionTimestamp = null;
 	clearInterval(last_question_timer);
 
-	const channel = client.channels.get(config.channel.trivia);
-	const question = 'Time is up!!!';
-	channel.send(question);
+	if (notify) {
+		const channel = client.channels.get(config.channel.trivia);
+		const question = 'Time is up!!!';
+		channel.send(question);
+	}
 };
 
 console.log('Preloading... [OK]');

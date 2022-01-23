@@ -47,20 +47,20 @@ const set_lastquestion = (obj) => {
 	lastQuestionId = obj.id;
 	lastQuestionTimestamp = Date.now();
 
-	last_question_timer = setTimeout(() => {
-		clear_lastquestion(true);
-	}, NUM_MINUTES_TO_WAIT);
+	// last_question_timer = setTimeout(() => {
+	// 	clear_lastquestion(true);
+	// }, NUM_MINUTES_TO_WAIT);
 };
 
 const clear_lastquestion = (notify = false) => {
 	lastQuestionId = 0;
 	lastQuestionTimestamp = null;
-	clearInterval(last_question_timer);
-	if (notify) {
-		const channel = client.channels.get(config.channel.trivia);
-		const question = 'Time is up!!!';
-		channel.send(question);
-	}
+	// clearInterval(last_question_timer);
+	// if (notify) {
+	// 	const channel = client.channels.get(config.channel.trivia);
+	// 	const question = 'Time is up!!!';
+	// 	channel.send(question);
+	// }
 };
 
 console.log('Preloading... [OK]');
@@ -69,19 +69,23 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 
 	// every 6.5h random message disabled
-	const channel = client.channels.get(config.channel.trivia);
-	setInterval(() => {
-		const index = Math.floor(Math.random() * questions.length);
-		const obj = questions[index];
-		set_lastquestion(obj);
-		const question = '```' + obj.question + '```' + `*\`${obj.game.toUpperCase()} | ${obj.id}\`*`;
-		channel.send(question);
-	}, NUM_MINUTES_RANDOM);
+	// const channel = client.channels.get(config.channel.trivia);
+	// setInterval(() => {
+	// 	const index = Math.floor(Math.random() * questions.length);
+	// 	const obj = questions[index];
+	// 	set_lastquestion(obj);
+	// 	const question = '```' + obj.question + '```' + `*\`${obj.game.toUpperCase()} | ${obj.id}\`*`;
+	// 	channel.send(question);
+	// }, NUM_MINUTES_RANDOM);
 });
 
 client.on('message', (message) => {
 	// ignore other bots or itself
 	if (message.author.bot) {
+		return;
+	}
+
+	if (message.channel.id !== config.channel.trivia) {
 		return;
 	}
 
